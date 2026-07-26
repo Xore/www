@@ -22,7 +22,8 @@ jobs:
         # not worth a wholesale rewrite of someone's site styling).
         run: |
           npm install --no-save stylelint
-          npx stylelint "html/**/*.css" --config '{"rules":{}}'
+          echo '{"rules":{}}' > /tmp/stylelint.empty.json
+          npx stylelint "html/**/*.css" --config /tmp/stylelint.empty.json
 
   validate-compose:
     runs-on: ubuntu-latest
