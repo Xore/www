@@ -1,0 +1,30 @@
+# xore.rocks — personal homepage
+# Place index.html in ./html/
+# Runs on home server, exposed via CGNAT gateway
+
+services:
+  nginx-homepage:
+    image: nginx:alpine
+    container_name: nginx-homepage
+    restart: unless-stopped
+    volumes:
+      - ./html:/usr/share/nginx/html:ro
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    ports:
+      - 127.0.0.1:8081:80
+    environment:
+      - TZ=Europe/Berlin
+    deploy:
+      resources:
+        limits:
+          cpus: "0.25"
+          memory: 64M
+
+  socat-homepage:
+    image: alpine/socat:latest
+    container_name: socat-homepage
+    restart: unless-stopped
+    command: TCP4-LISTEN:8081,bind=10.8.0.2,fork,reuseaddr TCP4:127.0.0.1:8081
+    network_mode: host
+    depends_on:
+      - nginx-homepage
