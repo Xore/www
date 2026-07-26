@@ -16,7 +16,9 @@ jobs:
       - name: HTMLHint
         run: npx --yes htmlhint "html/**/*.html"
       - name: Stylelint
-        run: npx --yes stylelint "html/**/*.css"
+        run: |
+          npm install --no-save stylelint stylelint-config-standard
+          npx stylelint "html/**/*.css"
 
   validate-compose:
     runs-on: ubuntu-latest
